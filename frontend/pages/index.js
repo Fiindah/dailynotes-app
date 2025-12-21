@@ -1,14 +1,16 @@
 import { useEffect, useState } from 'react';
 import NoteCard from '../components/NoteCard';
-import NoteForm from '../components/NoteForm';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
+// import NoteForm from '../components/NoteForm';
 
 const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
 
 export default function Home() {
   const [notes, setNotes] = useState([]);
   const [q, setQ] = useState('');
-  const [openForm, setOpenForm] = useState(false);
-  const [editing, setEditing] = useState(null);
+  // const [openForm, setOpenForm] = useState(false);
+  // const [editing, setEditing] = useState(null);
 
   async function fetchNotes() {
     const res = await fetch(`${API}/notes?q=${encodeURIComponent(q)}`);
@@ -38,39 +40,40 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen p-6 bg-gray-50">
-      <div className="max-w-6xl mx-auto">
-        <header className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold">DailyNotes</h1>
-          <div className="flex gap-2">
-            <input className="px-3 py-2 rounded border" placeholder="Search notes..." value={q} onChange={e=>setQ(e.target.value)} />
-            <button onClick={()=>{ setEditing(null); setOpenForm(true); }} className="px-4 py-2 rounded bg-indigo-600 text-white">Add Notes</button>
-          </div>
-        </header>
+  <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-gray-50">
+    <div className="max-w-6xl mx-auto px-4 py-6">
 
-        <main>
-          {openForm && (
-            <div className="mb-6 p-4 border rounded bg-white">
-              <NoteForm
-                initial={editing || {}}
-                onSave={editing ? handleUpdate : handleCreate}
-                onClose={() => { setOpenForm(false); setEditing(null); }}
-              />
-            </div>
-          )}
+      <Header
+        q={q}
+        setQ={setQ}
+        onAdd={() => router.push("/notes/create")}
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {notes.map(n => (
+        
+      />
+
+      <main className="mt-6">
+
+        {/* Masonry layout */}
+        <div className="columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-6">
+          {notes.map(n => (
+            <div 
+              key={n.id} 
+              className="break-inside-avoid mb-6 hover:scale-[1.01] transition-transform"
+            >
               <NoteCard
-                key={n.id}
                 note={n}
                 onEdit={(note) => { setEditing(note); setOpenForm(true); }}
                 onDelete={handleDelete}
               />
-            ))}
-          </div>
-        </main>
-      </div>
+            </div>
+          ))}
+        </div>
+      </main>
+
+      <Footer />
+
     </div>
-  );
+  </div>
+);
+
 }
