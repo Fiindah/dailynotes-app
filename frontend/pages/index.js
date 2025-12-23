@@ -1,79 +1,91 @@
-import { useEffect, useState } from 'react';
-import NoteCard from '../components/NoteCard';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
-// import NoteForm from '../components/NoteForm';
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import NoteCard from "../components/NoteCard";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 
-const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+const API =
+  process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
 
 export default function Home() {
+  const router = useRouter();
   const [notes, setNotes] = useState([]);
-  const [q, setQ] = useState('');
-  // const [openForm, setOpenForm] = useState(false);
-  // const [editing, setEditing] = useState(null);
+  const [q, setQ] = useState("");
+  const [loading, setLoading] = useState(true);
 
   async function fetchNotes() {
-    const res = await fetch(`${API}/notes?q=${encodeURIComponent(q)}`);
-    const data = await res.json();
-    setNotes(data);
+    try {
+      setLoading(true);
+      const res = await fetch(
+        `${API}/notes?q=${encodeURIComponent(q)}`
+      );
+      const data = await res.json();
+      setNotes(data);
+    } catch (err) {
+      console.error("Failed to fetch notes", err);
+    } finally {
+      setLoading(false);
+    }
   }
 
-  useEffect(() => { fetchNotes(); }, [q]);
-
-  const handleCreate = async (payload) => {
-    await fetch(`${API}/notes`, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(payload) });
-    setOpenForm(false);
+  useEffect(() => {
     fetchNotes();
-  };
-
-  const handleUpdate = async (payload) => {
-    await fetch(`${API}/notes/${editing.id}`, { method: 'PUT', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(payload) });
-    setEditing(null);
-    setOpenForm(false);
-    fetchNotes();
-  };
+  }, [q]);
 
   const handleDelete = async (id) => {
-    if (!confirm('Hapus note ini?')) return;
-    await fetch(`${API}/notes/${id}`, { method: 'DELETE' });
+    if (!confirm("Hapus note ini?")) return;
+
+    await fetch(`${API}/notes/${id}`, {
+      method: "DELETE",
+    });
+
     fetchNotes();
   };
 
   return (
-  <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-gray-50">
-    <div className="max-w-6xl mx-auto px-4 py-6">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-gray-50 flex flex-col">
+      <div className="max-w-6xl mx-auto px-4 py-6 flex-1">
 
-      <Header
-        q={q}
-        setQ={setQ}
-        onAdd={() => router.push("/notes/create")}
+        <Header
+          q={q}
+          setQ={setQ}
+          onAdd={() => router.push("/notes/create")}
+        />
 
-        
-      />
-
-      <main className="mt-6">
-
-        {/* Masonry layout */}
-        <div className="columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-6">
-          {notes.map(n => (
-            <div 
-              key={n.id} 
-              className="break-inside-avoid mb-6 hover:scale-[1.01] transition-transform"
-            >
-              <NoteCard
-                note={n}
-                onEdit={(note) => { setEditing(note); setOpenForm(true); }}
-                onDelete={handleDelete}
-              />
+        <main className="mt-6">
+          {loading ? (
+            <div className="text-center py-20 text-gray-500">
+              Loading notes...
             </div>
-          ))}
-        </div>
-      </main>
+          ) : notes.length === 0 ? (
+            <div className="text-center py-20 text-gray-500">
+              <p className="text-lg font-medium">
+                Tidak ada catatan
+              </p>
+              <p className="text-sm mt-2">
+                Klik <strong>Tambah Note</strong> untuk membuat
+                catatan pertama.
+              </p>
+            </div>
+          ) : (
+            <div className="columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-6">
+              {notes.map((n) => (
+                <div
+                  key={n.id}
+                  className="break-inside-avoid mb-6 hover:scale-[1.01] transition-transform"
+                >
+                  <NoteCard
+                    note={n}
+                    onDelete={handleDelete}
+                  />
+                </div>
+              ))}
+            </div>
+          )}
+        </main>
+      </div>
 
       <Footer />
-
     </div>
-  </div>
-);
-
+  );
 }

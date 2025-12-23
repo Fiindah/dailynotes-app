@@ -28,7 +28,7 @@ export default function Header({ q, setQ, onAdd }) {
           onClick={onAdd}
           className="px-4 py-2 bg-indigo-600 text-white rounded-lg shadow hover:bg-indigo-700"
         >
-          Add
+          + New Note
         </button>
 
         {/* Search icon (mobile only) */}

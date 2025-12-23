@@ -10,10 +10,12 @@ export default function NoteCard({ note, onEdit, onDelete }) {
       onClick={() => router.push(`/notes/${note.id}`)}
     >
       {note.pinned && <span className="text-xs">📌</span>}
-      <h3 className="font-semibold text-lg mb-2">{note.title || 'Untitled'}</h3>
+      
+      <h3 className="font-semibold text-lg mb-2">
+        {note.title || "Untitled"}</h3>
       
       <p className="text-gray-700 mb-4 whitespace-pre-wrap">
-        {note.content}
+        {note.content || "—"}
       </p>
 
     </div>
