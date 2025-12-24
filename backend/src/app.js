@@ -5,7 +5,11 @@ const noteRoutes = require('./routes/note.routes');
 const db = require('./models');
 
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: '*',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+}));
+
 app.use(bodyParser());
 
 app.get('/', (req, res) => res.send('DailyNotes API'));
