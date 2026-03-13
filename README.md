@@ -7,6 +7,31 @@ Aplikasi ini dibangun menggunakan:
 
 ---
 
+## 📸 Preview Aplikasi
+
+## 🌐 Tampilan Utama & Detail
+
+| Homepage | Detailpage |
+| :---: | :---: |
+| <img src="screenshots/homepage.png" width="450" alt="Home Page"> | <img src="screenshots/detailpage.jpeg" width="450" alt="Detail Page"> |
+
+---
+
+## 📝 Manajemen Data (CRUD)
+Tampilan form untuk operasi Create, Edit, dan Delete.
+
+<p align="center">
+  <img src="screenshots/form.jpeg" width="30%" alt="Create Note" />
+  <img src="screenshots/edit.png" width="30%" alt="Edit Note" />
+  <img src="screenshots/delete.png" width="30%" alt="Delete Note" />
+</p>
+
+<p align="center">
+  <i>Kiri ke kanan: Form Tambah, Form Edit, dan Konfirmasi Hapus.</i>
+</p>
+
+---
+
 ## ✨ Features
 - Create Note
 - Read 
