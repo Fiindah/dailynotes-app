@@ -18,7 +18,6 @@ Aplikasi ini dibangun menggunakan:
 ---
 
 ## 📝 Manajemen Data (CRUD)
-Tampilan form untuk operasi Create, Edit, dan Delete.
 
 <p align="center">
   <img src="screenshots/form.jpeg" width="30%" alt="Create Note" />
